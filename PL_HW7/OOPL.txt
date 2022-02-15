@@ -1,0 +1,108 @@
+## 1
+```python
+class Point:
+	# hidden data: instance variables
+	# class variable
+	count = 0;
+   	# constructor: class method
+	def __init__(self, x, y):
+		self.x_ = x
+		self.y_ = y
+		Point.count+=1
+   	# instance methods
+	def getX(self):
+		return self.x_
+	def getY(self):
+		return self.y_
+	def move(self, dx, dy):
+		self.x_ = self.x_ + dx
+		self.y_ = self.y_ + dy
+	def __str__(self):
+		return "A point at "+str(self.getX())+","+str(self.getY())
+	def draw(self):
+		print(self)
+
+pt1 = Point(3, 5)
+pt1.draw()
+print(Point.count)
+pt1.move(1, 1)
+pt1.draw()
+pt2 = Point(2, 2)
+print(Point.count)
+```
+
+## 2
+```python
+class Point:
+	# hidden data: instance variables
+	# class variable
+	count = 0;
+   	# constructor: class method
+	def __init__(self, x, y):
+		self.x_ = x
+		self.y_ = y
+		Point.count+=1
+   	# instance methods
+	def getX(self):
+		return self.x_
+	def getY(self):
+		return self.y_
+	def move(self, dx, dy):
+		self.x_ = self.x_ + dx
+		self.y_ = self.y_ + dy
+	def __str__(self):
+		return "A point at "+str(self.getX())+","+str(self.getY())
+	def draw(self):
+		print(self)
+
+class ColorPoint(Point):
+	# constructor
+	def __init__(self, x, y, c):
+		super().__init__(x, y)
+		self.color = c
+	def getColor(self):
+		return self.color
+	def setColor(self, c):
+		self.color = c
+	# method overriding
+	def __str__(self):
+		return super().__str__()+" with color:"+str(self.getColor())
+
+
+cpt = ColorPoint(3, 5, "RED")
+
+cpt.draw()
+
+cpt.move(1, 1)
+
+cpt.draw()
+```
+
+## 3
+在static typing下，以java為例:
+class Point {
+  ...
+  boolean equals( Point other) {
+	  return (this.getX() == other.getX())
+	    && (this.getY() == other.getY());
+  }
+}
+class ColorPoint extends Point {
+  ...
+  boolean equals( ColorPoint other) {
+	return super.equals(other) && (this.getColor() == other.getColor());
+  }
+}
+...
+boolean b = pt1.equals(pt2)
+這裡如果pt1的type為單純的Point，只有第一份equals的implementation會被使用。此時，pt2也被equals視為type Point做比較。
+但若pt1的type為ColorPoint，因為對ColorPoint來說有
+  boolean equals( Point other) {...
+  boolean equals( ColorPoint other) {...
+兩種不同implementaion，程式將依據pt2的type發生overloading，決定使用哪一組equals。
+在compile time或是 run time都不會給出error。
+
+相較之下，如果在dynamic typing的程式語言做類似宣告。
+	equals( other) {...
+	equals( other) {...
+兩個function會發生overriding，在ColorPoint和單純Point的比較時會因為單純Point無法getColor發生runtime error。

@@ -1,0 +1,53 @@
+## Program 1
+
+```python
+getX, setX = func()
+```
+在這裡，呼叫func()會在memory裡產生func的stack，其中包含x=10、getX()和setX()。
+將getX()和setX()assign給在main scope的getX和setX後，清除func()的stack。
+而其中，因為getX()和setX()被main所referenced，而x = 10又被getX()所referenced，所以getX()和setX()被保留給main scope，x被保留供給getX()。
+
+```python
+getX()
+```
+呼叫getX()，依照implementation將return x。
+此時因為x不存在getX()的local scope，所以往上一層enclosing scope找到，屬於上層variable x的值(10)。
+
+```python
+setX(20)
+```
+呼叫setX()，依照implementation將執行 "x = n"。其中，因為對setX()來說local scope內部不存在variable x，程式將產生一個setX的local variable名叫x，並指派n值。
+
+
+```python
+getX() 
+```
+呼叫getX()，依照implementation將return x。
+此時因為x不存在getX()的local scope，所以往上一層enclosing scope找到，屬於上層local variable x的值(10)。
+
+## Program 2
+
+```python
+getX, setX = func()
+```
+在這裡，呼叫func()會在memory裡產生func的stack，其中包含x=10、getX()和setX()。
+將getX()和setX()assign給在main scope的getX和setX後，清除func()的stack。
+而其中，因為getX()和setX()被main所referenced，而x = 10又被getX()和setX()所referenced，所以getX()和setX()被保留給main scope，x被保留供給getX()和setX()。
+
+```python
+print( getX() )
+```
+呼叫getX()，依照implementation將return x。
+此時因為x不存在getX()的local scope，所以往上一層enclosing scope找到，屬於上層local variable x的值(10)。
+
+```python
+print( setX(20) )
+```
+呼叫setX()，依照implementation將執行 "nonlocal x = n"。其中，上層的x對setX()來說為nonlocal variable，使用nonlocal語法使得setX()可以在內部使用上層的x，並指派n值
+
+
+```python
+print( getX() ) 
+```
+呼叫getX()，依照implementation將return x。
+此時因為x不存在getX()的local scope，所以往上一層enclosing scope找到，屬於上層local variable x的值(20)。
